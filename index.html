@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Jude</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --card: #16051a;
+      --accent: #f472b6;
+      --accent-soft: rgb(240, 145, 240);
+      --text-main: #f761ca;
+      --text-muted: #c4b5fd;
+      --border-soft: rgba(148, 163, 184, 0.5);
+      --radius-lg: 22px;
+      --shadow-soft: 0 16px 50px rgba(0, 0, 0, 0.9);
+      --font-heading: "Bradley Hand ITC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-body: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start; /* para que la tarjeta quede a la IZQUIERDA */
+      padding: 32px 5vw;
+      color: var(--text-main);
+
+      /* FONDO: tu imagen + un degradado oscuro encima */
+      background-image:
+        radial-gradient(circle at center left, rgba(231, 68, 177, 0.336), rgba(0, 0, 0, 0.007)),
+        url("jack-fondo.jpg.png");   /* <-- CAMBIA ESTE NOMBRE SEGÚN TU ARCHIVO */
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center right; /* Jack a la DERECHA */
+    }
+
+    main.frame {
+      width: 100%;
+      max-width: 620px;         /* tamaño de la tarjeta */
+      background: radial-gradient(circle at top left,
+                    rgba(24, 9, 35, 0.96),
+                    rgba(10, 6, 20, 0.98));
+      border-radius: 26px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border-soft);
+      padding: 26px 26px 22px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(16px);
+    }
+
+    main.frame::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(244, 114, 182, 0.28), transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.16), transparent 65%);
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .frame-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: radial-gradient(circle at top left,
+                    rgba(56, 189, 248, 0.18),
+                    rgba(30, 15, 42, 0.9));
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+      font-family: var(--font-heading);
+    }
+
+    .tag-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 14px rgba(244, 114, 182, 0.9);
+    }
+
+    /* Header con posibles foto + texto */
+    .hero-top {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 12px;
+    }
+
+    .avatar-wrapper {
+      width: 90px;
+      height: 90px;
+      border-radius: 999px;
+      padding: 3px;
+      background: conic-gradient(from 180deg,
+                   #f9a8d4, #c4b5fd, #22d3ee, #f9a8d4);
+      box-shadow: 0 0 20px rgba(244, 114, 182, 0.7);
+      flex-shrink: 0;
+    }
+
+    .avatar-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 999px;
+      overflow: hidden;
+      background: radial-gradient(circle at 30% 0%, #f9a8d4, #4c0519);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(2.4rem, 4vw, 3.2rem);
+      line-height: 1.05;
+      margin-bottom: 6px;
+      letter-spacing: 0.03em;
+    }
+
+    h1 span {
+      display: block;
+      background: linear-gradient(120deg, #f9a8d4, #e879f9, #fb923c);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      font-size: 0.98rem;
+      color: var(--text-muted);
+      max-width: 520px;
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .pill {
+      padding: 6px 13px;
+      border-radius: 999px;
+      background: rgba(42, 15, 36, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      font-size: 11px;
+      color: var(--text-muted);
+      backdrop-filter: blur(10px);
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .btn {
+      padding: 10px 19px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.96rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      font-family: var(--font-heading);
+      letter-spacing: 0.03em;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #f9a8d4, #ec4899);
+      color: #2b0b1f;
+      box-shadow:
+        0 0 24px rgba(236, 72, 153, 0.8),
+        0 14px 36px rgba(0, 0, 0, 0.9);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #9d174d, #4c0519);
+      color: #ffe4f1;
+      box-shadow:
+        0 0 18px rgba(190, 24, 93, 0.6),
+        0 14px 32px rgba(0, 0, 0, 0.9);
+      border: 1px solid rgba(248, 187, 208, 0.45);
+    }
+
+    .btn-icon {
+      font-size: 1.1rem;
+      translate: 0 1px;
+    }
+
+    .meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .meta strong {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .grid-cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .card {
+      border-radius: var(--radius-lg);
+      background: radial-gradient(circle at top left,
+                    rgba(27, 15, 42, 0.96),
+                    rgba(26, 12, 38, 0.98));
+      border: 1px solid var(--border-soft);
+      padding: 16px 16px 14px;
+      backdrop-filter: blur(12px);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      gap: 10px;
+    }
+
+    .card-title {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-family: var(--font-heading);
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.9);
+    }
+
+    .list {
+      list-style: none;
+      display: grid;
+      gap: 7px;
+      font-size: 0.9rem;
+      color: var(--text-main);
+    }
+
+    .list li span {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .contact-card {
+      background: radial-gradient(circle at top right,
+                  var(--accent-soft),
+                  rgba(34, 15, 42, 0.98));
+      display: none;          /* oculta por defecto */
+    }
+
+    .contact-card.is-visible {
+      display: block;        /* se muestra al hacer clic */
+    }
+
+    .contact-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+
+    .contact-item span {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    .contact-value {
+      color: #2b0b1f;
+      font-weight: 600;
+    }
+
+    a.link-inline {
+      text-decoration: none;
+    }
+
+    .contact-value a.link-inline {
+      color: #2b0b1f;
+      border-bottom: 1px solid rgba(43, 11, 31, 0.35);
+    }
+
+    .contact-value a.link-inline:hover {
+      border-bottom-color: rgba(43, 11, 31, 0.8);
+    }
+
+    @media (max-width: 700px) {
+      body {
+        justify-content: center;
+        padding: 20px;
+        background-position: center center;
+      }
+
+      main.frame {
+        max-width: 100%;
+      }
+
+      .hero-top {
+        flex-direction: row;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="frame">
+    <div class="frame-inner">
+      <div class="tag">
+        <div class="tag-dot"></div>
+        <span>Portafolio · Personal</span>
+      </div>
+
+
+        <div class="hero-text">
+          <h1>
+            Hola hola caracola, soy
+            <span>Jude</span>
+          </h1>
+        </div>
+      </div>
+
+      <p class="subtitle">
+        Este es mi espacio en la web. Un lugar para organizar mis proyectos,
+        mis ideas y todo lo que viene.
+      </p>
+
+      <div class="pill-row">
+        <div class="pill">Administración y organización</div>
+        <div class="pill">Automatización con hojas de cálculo</div>
+        <div class="pill">Proyectos creativos</div>
+      </div>
+
+      <div class="cta-row">
+        <a href="#contacto" id="btn-contactar" class="btn btn-primary">
+          <span class="btn-icon">✉️</span>
+          <span>Contactame</span>
+        </a>
+        <a href="#sobre-mi" class="btn btn-secondary">
+          <span class="btn-icon">✉️</span>
+          <span>Ver más sobre mí</span>
+        </a>
+      </div>
+
+      <p class="meta">
+        Este sitio está en construcción constante. <strong>Próximamente</strong> más secciones,
+        enlaces y proyectos.
+      </p>
+
+      <div class="grid-cards">
+        <article id="sobre-mi" class="card">
+          <div class="card-header">
+            <h2 class="card-title">Sobre mí</h2>
+            <div class="status-dot"></div>
+          </div>
+          <ul class="list">
+            <li>
+              Administración & organización
+              <span>Gestión, números y sistemas conviviendo sin pelearse.</span>
+            </li>
+            <li>
+              Mentalidad de futuro
+              <span>Me gusta mejorar procesos, automatizar tareas y aprender cosas nuevas.</span>
+            </li>
+          </ul>
+          <div class="badge-row">
+            <div class="badge">Curiosa por naturaleza</div>
+            <div class="badge">Amiga de las planillas</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <h2 class="card-title">Lo que me interesa</h2>
+          </div>
+          <ul class="list">
+            <li>Automatización de tareas
+              <span>Hojas de cálculo, scripts, pequeños sistemas que hacen la vida más fácil.</span>
+            </li>
+            <li>Proyectos digitales
+              <span>Ideas para negocios online, branding y organización.</span>
+            </li>
+          </ul>
+        </article>
+
+        <article id="contacto" class="card contact-card">
+          <div class="card-header">
+            <h2 class="card-title">Contacto</h2>
+          </div>
+          <div class="contact-item">
+            <span>Teléfono</span>
+            <div class="contact-value">381 443 0501</div>
+          </div>
+          <div class="contact-item">
+            <span>Mail</span>
+            <div class="contact-value">
+              <a href="mailto:jude2522@gmail.com" class="link-inline">jude2522@gmail.com</a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <span>Instagram</span>
+            <div class="contact-value">
+              <a href="https://www.instagram.com/jude2522/" class="link-inline" target="_blank" rel="noopener">
+                @jude2522
+              </a>
+            </div>
+          </div>
+          <p class="meta" style="margin-top: 6px;">
+            ¡Estoy abierta a nuevas oportunidades y colaboraciones! No dudes en contactarme.
+          </p>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const btn = document.getElementById('btn-contactar');
+      const card = document.getElementById('contacto');
+      if (!btn || !card) return;
+
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        card.classList.add('is-visible');
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    });
+  </script>
+</body>
+</html>
